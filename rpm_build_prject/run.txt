@@ -1,0 +1,1 @@
+rpmbuild -ba -D 'debug_package %{nil}' SPECS/netflow2ng.spec
