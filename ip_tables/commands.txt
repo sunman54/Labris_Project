@@ -1,0 +1,50 @@
+sudo ip netns add client1
+sudo ip netns add client2
+sudo ip netns add server
+sudo ip netns add firewall
+
+sudo ip link add client1-veth0 type veth peer name fw-client1
+sudo ip link add client2-veth0 type veth peer name fw-client2
+sudo ip link add server-veth0 type veth peer name fw-server
+sudo ip link add fw-host type veth peer name fw-firewall
+
+sudo ip addr add 192.0.2.1/26 dev fw-client1
+sudo ip addr add 192.0.2.65/26 dev fw-client2
+sudo ip addr add 192.0.2.129/26 dev fw-server
+sudo ip addr add 192.0.2.193/26 dev fw-host
+sudo ip addr add 192.0.2.194/26 dev fw-firewall
+
+
+sudo ip link set client1-veth0 netns client1
+sudo ip link set client2-veth0 netns client2
+sudo ip link set server-veth0 netns server
+sudo ip link set fw-client1 netns firewall
+sudo ip link set fw-client2 netns firewall
+sudo ip link set fw-server netns firewall
+sudo ip link set fw-host netns firewall
+sudo ip link set fw-firewall netns firewall
+
+
+sudo ip netns exec client1 ip link set dev lo up
+sudo ip netns exec client1 ip link set dev client1-veth0 up
+sudo ip netns exec client1 ip addr add 192.0.2.2/26 dev client1-veth0
+
+sudo ip netns exec client2 ip link set dev lo up
+sudo ip netns exec client2 ip link set dev client2-veth0 up
+sudo ip netns exec client2 ip addr add 192.0.2.66/26 dev client2-veth0
+
+sudo ip netns exec server ip link set dev lo up
+sudo ip netns exec server ip link set dev server-veth0 up
+sudo ip netns exec server ip addr add 192.0.2.130/26 dev server-veth0
+
+sudo ip netns exec firewall ip link set dev lo up
+sudo ip netns exec firewall ip link set dev fw-client1 up
+sudo ip netns exec firewall ip addr add 192.0.2.2/26 dev fw-client1
+sudo ip netns exec firewall ip link set dev fw-client2 up
+sudo ip netns exec firewall ip addr add 192.0.2.66/26 dev fw-client2
+sudo ip netns exec firewall ip link set dev fw-server up
+sudo ip netns exec firewall ip addr add 192.0.2.130/26 dev fw-server
+sudo ip netns exec firewall ip link set dev fw-host up
+sudo ip netns exec firewall ip addr add 192.0.2.193/26 dev fw-host
+sudo ip netns exec firewall ip link set dev fw-firewall up
+sudo ip netns exec firewall ip addr add 192.0.2.194/26 dev fw-firewall
