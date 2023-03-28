@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve myproject
+After=network.target
+
+[Service]
+User=root
+Group=nginx
+WorkingDirectory=/labris_flaskapp
+Environment="PATH=/labris_flaskapp/venv/bin"
+ExecStart=/labris_flaskapp/venv/bin/uwsgi --ini myproject.ini
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,22 @@
+---
+- name : serve myproject with Nginx
+  host : all
+  become : true
+
+  tasks:
+  - name: install nginx
+    yum:
+      name: nginx
+      state: latest
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: /myproject.service
+    dest: /etc/systemd/system/myproject.service
+    mode: '0644'
+    
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: /nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: '0644'

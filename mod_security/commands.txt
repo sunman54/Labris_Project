@@ -1,0 +1,6 @@
+
+# run docker with systemD
+> docker run --network="host" --privileged --name machinex -v /sys/fs/cgroup:/sys/fs/cgroup:ro -it centos_sunman2 /usr/lib/systemd/systemd
+
+# create Socket
+> uwsgi --socket myproject.sock --module myproject --callable application --logto uwsgi.log
